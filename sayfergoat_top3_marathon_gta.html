@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>TOP 3 CHATTERS — MARATHON — SAYFERGOAT — SAN ANDREAS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rubik:wght@400;500;700;900&display=swap');
+
+  :root{
+    --sa-yellow:#FFD400;
+    --sa-yellow-dark:#C79A00;
+    --sa-green:#2F7A34;
+    --sa-green-light:#57B45B;
+    --sa-orange:#FF7A1A;
+    --accent:var(--sa-green-light);
+    --accent2:var(--sa-yellow);
+    --gold:#FFD700;
+    --silver:#D9D9D9;
+    --bronze:#CD8A4A;
+    --ink:#FFF6D8;
+    --muted:#C9B37D;
+    --bg:transparent;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    background:var(--bg);
+    font-family:'Rubik', sans-serif;
+    overflow:hidden;
+  }
+  #wrap{
+    width:452px;
+    padding:16px 18px 18px 18px;
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(10,14,8,0.0), rgba(10,14,8,0.0));
+  }
+
+  /* ---------- header ---------- */
+  #headerRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+    background:linear-gradient(90deg, #000000 0%, #101a0e 60%, #000000 100%);
+    border:2px solid var(--sa-yellow);
+    box-shadow:0 0 0 1px #000, 0 2px 10px rgba(0,0,0,0.6), inset 0 0 12px rgba(255,212,0,0.08);
+    padding:8px 12px;
+  }
+  #chan{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  #goat{ font-size:18px; filter:drop-shadow(0 0 6px rgba(255,122,26,.8)); }
+  #title{
+    font-family:'Bebas Neue', sans-serif;
+    font-weight:400;
+    font-size:19px;
+    letter-spacing:1.4px;
+    color:var(--sa-yellow);
+    text-transform:uppercase;
+    text-shadow:
+      -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000,
+      0 2px 0 #6b5400;
+  }
+  #subtitle{
+    font-size:11px;
+    color:var(--sa-green-light);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    text-transform:uppercase;
+    margin-bottom:12px;
+    padding-left:2px;
+  }
+  #dot{
+    width:7px; height:7px; border-radius:50%;
+    background:#ff4444;
+    box-shadow:0 0 6px #ff4444;
+    transition:all .3s ease;
+  }
+  #dot.live{
+    background:var(--sa-green-light);
+    box-shadow:0 0 8px var(--sa-green-light), 0 0 16px var(--sa-green-light);
+    animation:pulse 1.4s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.35; }
+  }
+
+  /* ---------- leaderboard ---------- */
+  .row{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:linear-gradient(90deg, rgba(10,16,8,0.92), rgba(10,16,8,0.72));
+    border:1px solid var(--sa-yellow-dark);
+    border-left:4px solid var(--sa-green);
+    border-radius:2px;
+    padding:10px 14px;
+    margin-bottom:9px;
+    overflow:hidden;
+    transition: transform .35s ease;
+  }
+  .row:hover{ transform: translateX(2px); }
+  .row .bar{
+    position:absolute;
+    left:0; top:0; bottom:0;
+    background:linear-gradient(90deg, rgba(255,212,0,0.30), rgba(47,122,52,0.10));
+    width:0%;
+    transition: width .6s cubic-bezier(.22,1,.36,1);
+    z-index:0;
+  }
+  .rank{
+    font-family:'Bebas Neue', sans-serif;
+    font-weight:400;
+    font-size:23px;
+    width:26px;
+    text-align:center;
+    z-index:1;
+  }
+  .rank.r1{ color:var(--gold); text-shadow:0 0 10px rgba(255,215,0,0.85), 0 2px 0 #5a4600; }
+  .rank.r2{ color:var(--silver); text-shadow:0 0 8px rgba(217,217,217,0.7), 0 2px 0 #4a4a4a; }
+  .rank.r3{ color:var(--bronze); text-shadow:0 0 8px rgba(205,138,74,0.7), 0 2px 0 #4a2f14; }
+
+  .avatar-wrap{
+    position:relative;
+    width:34px; height:34px;
+    flex:0 0 34px;
+    border-radius:4px;
+    z-index:1;
+    background:rgba(0,0,0,0.4);
+  }
+  .avatar-wrap.r1{ box-shadow:0 0 0 2px var(--gold), 0 0 8px rgba(255,215,0,0.55); }
+  .avatar-wrap.r2{ box-shadow:0 0 0 2px var(--silver), 0 0 8px rgba(217,217,217,0.45); }
+  .avatar-wrap.r3{ box-shadow:0 0 0 2px var(--bronze), 0 0 8px rgba(205,138,74,0.5); }
+  .avatar-img{
+    width:100%; height:100%;
+    border-radius:3px;
+    object-fit:cover;
+    display:block;
+  }
+  .avatar-fallback{
+    width:100%; height:100%;
+    border-radius:3px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-family:'Bebas Neue', sans-serif;
+    font-weight:400;
+    font-size:16px;
+    color:#fff;
+    text-shadow:0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .info{ flex:1; z-index:1; min-width:0; }
+  .name{
+    font-weight:700;
+    font-size:14.5px;
+    color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-shadow:0 1px 2px rgba(0,0,0,0.6);
+  }
+  .count{
+    font-family:'Bebas Neue', sans-serif;
+    font-weight:400;
+    font-size:19px;
+    color:var(--sa-yellow);
+    z-index:1;
+    font-variant-numeric: tabular-nums;
+    min-width:34px;
+    text-align:right;
+    text-shadow:0 1px 0 #000;
+  }
+  .empty{
+    color:#8fae7a;
+    font-size:13px;
+    font-style:italic;
+    padding:6px 4px 2px 4px;
+  }
+
+  #footer{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--sa-yellow);
+    margin-top:4px;
+    letter-spacing:0.3px;
+    font-family:'Bebas Neue', sans-serif;
+    font-size:13px;
+    opacity:0.9;
+  }
+</style>
+</head>
+<body>
+
+<div id="wrap">
+
+  <div id="headerRow">
+    <div id="chan">
+      <span id="goat">🐐🌴</span>
+      <span id="title">SAYFERGOAT · МАРАФОН GTA SAN ANDREAS</span>
+    </div>
+  </div>
+  <div id="subtitle"><span id="dot"></span> <span id="status">подключение...</span></div>
+
+  <div id="list">
+    <div class="empty">Ждём сообщения в чате...</div>
+  </div>
+
+  <div id="footer">
+    <span id="totalMsgs">Сообщений: 0</span>
+    <span id="totalUsers">Чаттеров: 0</span>
+  </div>
+</div>
+
+<script>
+const CHANNEL = "sayfergoat";
+const STORAGE_KEY = "twitch_top3_sayfergoat_marathon";
+
+// Боты, которых никогда не считаем в топе (логины в нижнем регистре).
+const IGNORED_USERS = ['fossabot'];
+
+// Вечная стата — сбрасывается ТОЛЬКО вручную командой !resettop от стримера.
+let stats = {};
+let totalMessages = 0;
+
+let ws = null;
+let reconnectDelay = 1000;
+const MAX_RECONNECT_DELAY = 15000;
+
+const dotEl = document.getElementById('dot');
+const statusEl = document.getElementById('status');
+const listEl = document.getElementById('list');
+const totalMsgsEl = document.getElementById('totalMsgs');
+const totalUsersEl = document.getElementById('totalUsers');
+
+function loadStats() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      stats = parsed.stats || {};
+      totalMessages = parsed.totalMessages || 0;
+    }
+    purgeIgnoredUsers();
+  } catch(e) {
+    console.error("Ошибка загрузки сохранений", e);
+  }
+}
+
+function saveStats() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      stats,
+      totalMessages
+    }));
+  } catch(e) {
+    console.error("Ошибка сохранения", e);
+  }
+}
+
+// Убирает из вечной статы игнорируемых ботов (например fossabot),
+// если они успели попасть в счёт до того как были добавлены в список игнора.
+function purgeIgnoredUsers(){
+  let changed = false;
+  IGNORED_USERS.forEach(login => {
+    if(stats[login]){
+      totalMessages = Math.max(0, totalMessages - (stats[login].count || 0));
+      delete stats[login];
+      changed = true;
+    }
+  });
+  if(changed) saveStats();
+}
+
+// Полный сброс — только по команде !resettop. Обнуляет и статы, и таймер марафона.
+function resetStats() {
+  stats = {};
+  totalMessages = 0;
+  saveStats();
+  render();
+}
+
+function setStatus(text, live){
+  statusEl.textContent = text;
+  dotEl.classList.toggle('live', !!live);
+}
+
+function connect(){
+  setStatus('подключение...', false);
+  ws = new WebSocket('wss://irc-ws.chat.twitch.tv:443');
+
+  ws.onopen = () => {
+    const nick = 'justinfan' + Math.floor(10000 + Math.random()*89999);
+    ws.send('CAP REQ :twitch.tv/tags twitch.tv/commands');
+    ws.send('PASS SCHMOOPIIE');
+    ws.send('NICK ' + nick);
+    ws.send('JOIN #' + CHANNEL.toLowerCase());
+  };
+
+  ws.onmessage = (event) => {
+    const lines = event.data.split('\r\n').filter(Boolean);
+    for(const line of lines){
+      handleLine(line);
+    }
+  };
+
+  ws.onclose = () => {
+    setStatus('отключено, переподключение...', false);
+    scheduleReconnect();
+  };
+
+  ws.onerror = () => {
+    setStatus('ошибка соединения...', false);
+    try{ ws.close(); }catch(e){}
+  };
+}
+
+function scheduleReconnect(){
+  setTimeout(connect, reconnectDelay);
+  reconnectDelay = Math.min(reconnectDelay * 1.6, MAX_RECONNECT_DELAY);
+}
+
+function handleLine(line){
+  if(line.startsWith('PING')){
+    ws.send('PONG :tmi.twitch.tv');
+    return;
+  }
+
+  if(line.includes(' 366 ') || line.includes('JOIN #')){
+    setStatus('в эфире — ' + CHANNEL.toUpperCase(), true);
+    reconnectDelay = 1000;
+  }
+
+  if(line.includes('PRIVMSG')){
+    const msg = parsePrivmsg(line);
+    if(msg) registerMessage(msg);
+  }
+}
+
+function parsePrivmsg(line){
+  let tags = {};
+  let rest = line;
+
+  if(line.startsWith('@')){
+    const spaceIdx = line.indexOf(' ');
+    const tagStr = line.slice(1, spaceIdx);
+    rest = line.slice(spaceIdx + 1);
+    tagStr.split(';').forEach(pair => {
+      const eq = pair.indexOf('=');
+      if(eq > -1){
+        tags[pair.slice(0, eq)] = pair.slice(eq + 1);
+      }
+    });
+  }
+
+  const match = rest.match(/^:([^!]+)!/);
+  if(!match) return null;
+  const login = match[1].toLowerCase();
+
+  const msgMatch = rest.match(/PRIVMSG #[^ ]+ :(.*)/);
+  const text = msgMatch ? msgMatch[1] : '';
+
+  const displayName = tags['display-name'] && tags['display-name'].length
+    ? tags['display-name']
+    : login;
+  const color = tags['color'] && tags['color'].length ? tags['color'] : null;
+
+  return { login, displayName, color, text };
+}
+
+// Антиспам: не считаем слишком частые сообщения одного юзера и повторяющийся копипаст.
+const MIN_INTERVAL_MS = 1200;      // минимальный интервал между засчитанными сообщениями
+const DUPLICATE_WINDOW_MS = 10000; // окно, в котором повтор того же текста считается спамом
+
+function registerMessage(msg){
+  if(msg.text.trim() === '!resettop' && msg.login === CHANNEL.toLowerCase()) {
+    resetStats();
+    return;
+  }
+
+  if(IGNORED_USERS.includes(msg.login)){
+    return;
+  }
+
+  const now = Date.now();
+  const prev = stats[msg.login];
+  const normalizedText = msg.text.trim().toLowerCase();
+
+  if(prev){
+    const sinceLast = now - (prev.lastTime || 0);
+    const tooFast = sinceLast < MIN_INTERVAL_MS;
+    const isDuplicate = normalizedText.length > 0
+      && normalizedText === prev.lastText
+      && sinceLast < DUPLICATE_WINDOW_MS;
+
+    if(tooFast || isDuplicate){
+      // Это спам — не засчитываем, но обновляем метку времени/текст,
+      // чтобы серия одинаковых/частых сообщений не "просочилась" через паузу.
+      prev.lastTime = now;
+      prev.lastText = normalizedText;
+      return;
+    }
+  }
+
+  if(!stats[msg.login]){
+    stats[msg.login] = { name: msg.displayName, color: msg.color, count: 0, lastTime: 0, lastText: '' };
+  }
+  stats[msg.login].name = msg.displayName;
+  if(msg.color) stats[msg.login].color = msg.color;
+  stats[msg.login].count += 1;
+  stats[msg.login].lastTime = now;
+  stats[msg.login].lastText = normalizedText;
+  totalMessages += 1;
+
+  saveStats();
+  render();
+}
+
+function fallbackColor(seed){
+  const palette = ['#FFD400','#2F7A34','#57B45B','#FF7A1A','#C79A00','#9CCC65','#FFB74D'];
+  let hash = 0;
+  for(let i=0;i<seed.length;i++) hash = seed.charCodeAt(i) + ((hash<<5)-hash);
+  return palette[Math.abs(hash) % palette.length];
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function render(){
+  const entries = Object.entries(stats)
+    .map(([login, v]) => ({ login, ...v }))
+    .sort((a,b) => b.count - a.count)
+    .slice(0, 3);
+
+  totalMsgsEl.textContent = 'Сообщений: ' + totalMessages;
+  totalUsersEl.textContent = 'Чаттеров: ' + Object.keys(stats).length;
+
+  if(entries.length === 0){
+    listEl.innerHTML = '<div class="empty">Ждём сообщения в чате...</div>';
+    return;
+  }
+
+  const maxCount = entries[0].count || 1;
+  const medals = ['r1','r2','r3'];
+  const rankNum = ['1','2','3'];
+
+  listEl.innerHTML = entries.map((e, i) => {
+    const pct = Math.max(8, Math.round((e.count / maxCount) * 100));
+    const color = e.color || fallbackColor(e.login);
+    const initial = escapeHtml((e.name || e.login).trim().charAt(0).toUpperCase());
+    return `
+      <div class="row">
+        <div class="bar" style="width:${pct}%"></div>
+        <div class="rank ${medals[i]}">${rankNum[i]}</div>
+        <div class="avatar-wrap ${medals[i]}">
+          <img class="avatar-img" alt="" style="display:none;">
+          <div class="avatar-fallback" style="display:flex; background:${color}">${initial}</div>
+        </div>
+        <div class="info">
+          <div class="name" style="color:${color}">${escapeHtml(e.name)}</div>
+        </div>
+        <div class="count">${e.count}</div>
+      </div>
+    `;
+  }).join('');
+
+  Array.from(listEl.children).forEach((rowEl, idx) => {
+    loadAvatar(entries[idx].login, rowEl);
+  });
+}
+
+// ---- аватарки твича (decapi.me отдаёт ссылку ТЕКСТОМ, поэтому берём её через fetch) ----
+const avatarCache = {};
+const AVATAR_CACHE_MS = 25 * 60 * 1000; // decapi.me кэширует на своей стороне до 30 минут
+
+async function getAvatarUrl(login){
+  const cached = avatarCache[login];
+  if(cached && (Date.now() - cached.time) < AVATAR_CACHE_MS){
+    return cached.url;
+  }
+  try{
+    const resp = await fetch('https://decapi.me/twitch/avatar/' + encodeURIComponent(login));
+    if(resp.ok){
+      const text = (await resp.text()).trim();
+      if(text.startsWith('http')){
+        avatarCache[login] = { url: text, time: Date.now() };
+        return text;
+      }
+    }
+  }catch(e){
+    console.error('Не удалось получить аватар для', login, e);
+  }
+  return cached ? cached.url : null;
+}
+
+function loadAvatar(login, rowEl){
+  getAvatarUrl(login).then(url => {
+    if(!url) return;
+    const img = rowEl.querySelector('.avatar-img');
+    const fallback = rowEl.querySelector('.avatar-fallback');
+    if(!img) return;
+    img.onload = () => { img.style.display = 'block'; if(fallback) fallback.style.display = 'none'; };
+    img.onerror = () => { img.style.display = 'none'; if(fallback) fallback.style.display = 'flex'; };
+    img.src = url;
+  });
+}
+
+loadStats();
+render();
+connect();
+</script>
+</body>
+</html>
